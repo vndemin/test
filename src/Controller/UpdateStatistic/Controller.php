@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\UpdateStatistic;
 
 use App\Controller\UpdateStatistic\Input\Request;
-use App\Exception\ServiceIsNotEvailable;
+use App\Exception\ServiceIsNotAvailable;
 use App\UseCase\UpdateStatisticUseCase;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -67,7 +67,7 @@ class Controller
         }
         try {
             $this->useCase->execute($request->countryCode);
-        } catch (ServiceIsNotEvailable $exception) {
+        } catch (ServiceIsNotAvailable $exception) {
             return View::create(null,HttpResponse::HTTP_SERVICE_UNAVAILABLE);
         }
 

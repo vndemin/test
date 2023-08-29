@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\GetReport;
 
-use App\Exception\ServiceIsNotEvailable;
+use App\Exception\ServiceIsNotAvailable;
 use App\UseCase\GetReportUseCase;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -46,7 +46,7 @@ class Controller
     {
         try {
             $result = $this->useCase->execute();
-        } catch (ServiceIsNotEvailable $exception) {
+        } catch (ServiceIsNotAvailable $exception) {
             return View::create(null,HttpResponse::HTTP_SERVICE_UNAVAILABLE);
         }
 
