@@ -68,7 +68,7 @@ class Controller
         try {
             $this->useCase->execute($request->countryCode);
         } catch (ServiceIsNotAvailable $exception) {
-            return View::create(null,HttpResponse::HTTP_SERVICE_UNAVAILABLE);
+            return View::create(null, HttpResponse::HTTP_SERVICE_UNAVAILABLE);
         }
 
         return View::create(null, HttpResponse::HTTP_NO_CONTENT);

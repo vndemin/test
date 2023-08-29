@@ -47,7 +47,7 @@ class Controller
         try {
             $result = $this->useCase->execute();
         } catch (ServiceIsNotAvailable $exception) {
-            return View::create(null,HttpResponse::HTTP_SERVICE_UNAVAILABLE);
+            return View::create(null, HttpResponse::HTTP_SERVICE_UNAVAILABLE);
         }
 
         return View::create($result, HttpResponse::HTTP_OK);
