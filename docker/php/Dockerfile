@@ -18,6 +18,8 @@ RUN git config --global user.email "vndemin.dev@gmail.com"
 RUN git config --global user.name  "vndemin"
 RUN git config --global --add safe.directory /var/www/mayflower
 
+COPY ./composer.json composer.json
+COPY ./composer.lock composer.lock
 RUN composer install \
     --no-interaction \
     --no-plugins \
