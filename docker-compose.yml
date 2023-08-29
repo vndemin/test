@@ -1,0 +1,151 @@
+version: '3.3'
+
+services:
+    php1:
+        container_name: mayflower.php1
+        build:
+            context: ./docker/php
+        ports:
+            - '9009:9000'
+        volumes:
+            - ./:/var/www/mayflower
+            - ./vendor:/var/www/mayflower/vendor
+        depends_on:
+            - redis-cluster
+        networks:
+            mayflower_subnet:
+                ipv4_address: 172.20.0.9
+
+    nginx:
+        container_name: mayflower.nginx
+        image: nginx:stable-alpine
+        ports:
+            - '8888:80'
+        volumes:
+            - ./:/var/www/mayflower
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - php1
+            - redis-cluster
+        networks:
+            mayflower_subnet:
+                ipv4_address: 172.20.0.10
+
+    redis-cluster:
+        image: redis:6.2-alpine
+        container_name: mayflower.redis-cluster
+        command: redis-cli --cluster create 172.20.0.21:6373 172.20.0.22:6374 172.20.0.23:6375 172.20.0.24:6376 172.20.0.25:6377 172.20.0.26:6378 --cluster-replicas 1 --cluster-yes
+        restart: always
+        ports:
+            - '6379:6379'
+        depends_on:
+            - redis-node-1
+            - redis-node-2
+            - redis-node-3
+            - redis-node-4
+            - redis-node-5
+            - redis-node-6
+        networks:
+            mayflower_subnet:
+                ipv4_address: 172.20.0.20
+
+    redis-node-1:
+        image: redis:6.2-alpine
+        hostname: redis-node-1
+        command: redis-server /usr/local/etc/redis/redis.conf --save 20 1 --loglevel warning
+        ports:
+            - '6373:6373'
+        volumes:
+            - redis-node-1-data:/var/lib/redis
+            - ./docker/redis/redis-node-1.conf:/usr/local/etc/redis/redis.conf
+        networks:
+            mayflower_subnet:
+                ipv4_address: 172.20.0.21
+
+    redis-node-2:
+        image: redis:6.2-alpine
+        hostname: redis-node-2
+        command: redis-server /usr/local/etc/redis/redis.conf --save 20 1 --loglevel warning
+        ports:
+            - '6374:6374'
+        volumes:
+            - redis-node-2-data:/var/lib/redis
+            - ./docker/redis/redis-node-2.conf:/usr/local/etc/redis/redis.conf
+        networks:
+            mayflower_subnet:
+                ipv4_address: 172.20.0.22
+
+    redis-node-3:
+        image: redis:6.2-alpine
+        hostname: redis-node-3
+        command: redis-server /usr/local/etc/redis/redis.conf --save 20 1 --loglevel warning
+        ports:
+            - '6375:6375'
+        volumes:
+            - redis-node-3-data:/var/lib/redis
+            - ./docker/redis/redis-node-3.conf:/usr/local/etc/redis/redis.conf
+        networks:
+            mayflower_subnet:
+                ipv4_address: 172.20.0.23
+
+    redis-node-4:
+        image: redis:6.2-alpine
+        hostname: redis-node-4
+        command: redis-server /usr/local/etc/redis/redis.conf --save 20 1 --loglevel warning
+        ports:
+            - '6376:6376'
+        volumes:
+            - redis-node-4-data:/var/lib/redis
+            - ./docker/redis/redis-node-4.conf:/usr/local/etc/redis/redis.conf
+        networks:
+            mayflower_subnet:
+                ipv4_address: 172.20.0.24
+
+    redis-node-5:
+        image: redis:6.2-alpine
+        hostname: redis-node-5
+        command: redis-server /usr/local/etc/redis/redis.conf --save 20 1 --loglevel warning
+        ports:
+            - '6377:6377'
+        volumes:
+            - redis-node-5-data:/var/lib/redis
+            - ./docker/redis/redis-node-5.conf:/usr/local/etc/redis/redis.conf
+        networks:
+            mayflower_subnet:
+                ipv4_address: 172.20.0.25
+
+    redis-node-6:
+        image: redis:6.2-alpine
+        hostname: redis-node-6
+        command: redis-server /usr/local/etc/redis/redis.conf --save 20 1 --loglevel warning
+        ports:
+            - '6378:6378'
+        volumes:
+            - redis-node-6-data:/var/lib/redis
+            - ./docker/redis/redis-node-6.conf:/usr/local/etc/redis/redis.conf
+        networks:
+            mayflower_subnet:
+                ipv4_address: 172.20.0.26
+
+volumes:
+    db:
+        driver: local
+    redis-node-1-data:
+        driver: local
+    redis-node-2-data:
+        driver: local
+    redis-node-3-data:
+        driver: local
+    redis-node-4-data:
+        driver: local
+    redis-node-5-data:
+        driver: local
+    redis-node-6-data:
+        driver: local
+
+networks:
+    mayflower_subnet:
+        driver: bridge
+        ipam:
+            config:
+                  - subnet: 172.20.0.0/24
