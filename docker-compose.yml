@@ -4,12 +4,11 @@ services:
     php1:
         container_name: mayflower.php1
         build:
-            context: ./docker/php
+            context: .
+            dockerfile: docker/php/Dockerfile
+        working_dir: /var/www/mayflower
         ports:
             - '9009:9000'
-        volumes:
-            - ./:/var/www/mayflower
-            - ./vendor:/var/www/mayflower/vendor
         depends_on:
             - redis-cluster
         networks:
