@@ -28,4 +28,4 @@ RUN git config --global user.email "vndemin.dev@gmail.com"
 RUN git config --global user.name  "vndemin"
 RUN git config --global --add safe.directory /var/www/mayflower
 
-RUN mkdir var/cache && mkdir var/log && chown -R www-data:www-data ./var/cache && chown -R www-data:www-data ./var/log
+RUN mkdir var && mkdir var/cache && mkdir var/log && chown -R www-data:www-data ./var/cache && chown -R www-data:www-data ./var/log
