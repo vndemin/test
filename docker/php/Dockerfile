@@ -17,3 +17,13 @@ RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 RUN git config --global user.email "vndemin.dev@gmail.com"
 RUN git config --global user.name  "vndemin"
 RUN git config --global --add safe.directory /var/www/mayflower
+
+RUN composer install \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --no-dev \
+    --prefer-dist
+
+COPY . .
+RUN composer dump-autoload
